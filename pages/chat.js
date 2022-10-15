@@ -192,20 +192,6 @@ function MessageList(props) {
                                 marginBottom: '8px',
                             }}
                         > 
-                            <Icon
-                            label="Icon Component"
-                            type = 'button'
-                            onClick = {()=> {
-                                const id = mensagem.id
-                                return id
-                            }}
-                            name="FaTrashAlt"
-                            styleSheet={{
-                                color: 'red',
-                                float: 'right',
-                                cursor: 'pointer'
-                            }}
-                            />
 
 
                             <Image
