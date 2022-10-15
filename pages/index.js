@@ -1,54 +1,14 @@
-import {Box, Button, Text, TextField, Image} from '@skynexui/components';
+import { Box, Button, Text, TextField, Image } from '@skynexui/components';
+import React from 'react';
 import appConfig from '../config.json';
-
-function GlobalStyle(){
-    return(
-        <style global jsx>{`
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        list-style: none;
-        font-family: 'Roboto';
-      }
-      body {
-        font-family: 'Roboto';
-      }
-      /* App fit Height */ 
-      html, body, #__next {
-        min-height: 100vh;
-        display: flex;
-        flex: 1;
-      }
-      #__next {
-        flex: 1;
-      }
-      #__next > * {
-        flex: 1;
-      }
-      /* ./App fit Height */ 
-    `}</style>
-    )
-}
+import { useRouter } from 'next/router';
 
 function Title(props) {
-    return (
-        <>
-        <h1>{props.children}</h1>
-        <style jsx>{`
-        h1 {
-            color: ${appConfig.theme.colors.neutrals['000']};
-            font-family: 'Roboto';
-            font-style: normal;
-            font-weight: 700;
-            font-size: 24px;
-            line-height: 28px;
-            
-        }
-        `}</style>
-        </>
-    )
+  return (
+    <>
+      <h1>{props.children}</h1>
+    </>
+  )
 }
 
 // function HomePage() {
@@ -65,18 +25,31 @@ function Title(props) {
 // export default HomePage
 
 export default function PaginaInicial() {
-    const username = 'leonardofigueiro';
-  
-    return (
-      <>
-        <GlobalStyle />
-        <Box
-          styleSheet={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            
-            backgroundImage: 'url(https://virtualbackgrounds.site/wp-content/uploads/2020/07/staredad-1536x864.jpg)',
-            backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
-          }}
+  //const username = 'leonardofigueiro';
+  const [username, setUsername] = React.useState('');
+  const roteamento = useRouter();
+
+  return (
+    <>
+
+      <Box
+        styleSheet={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          backgroundImage: 'url(https://virtualbackgrounds.site/wp-content/uploads/2020/07/staredad-1536x864.jpg)',
+          backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
+        }}
+      >
+        <Box styleSheet={{
+          flexDirection: {
+            xs: 'column',
+            sm: 'row',
+          },
+          width: '100%', maxWidth: '700px', height: 'auto',
+          borderRadius: '5px', padding: '32px', margin: '16px',
+          boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
+          backgroundColor: appConfig.theme.colors.neutrals[700],
+
+        }}
         >
           <Box
             styleSheet={{
@@ -87,28 +60,39 @@ export default function PaginaInicial() {
                 xs: 'column',
                 sm: 'row',
               },
-              width: '100%', maxWidth: '700px',
-              borderRadius: '5px', padding: '32px', margin: '16px',
-              boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
-              backgroundColor: appConfig.theme.colors.neutrals[700],
+
             }}
           >
             {/* Formulário */}
             <Box
               as="form"
+              onSubmit={function (infoEvent) {
+                infoEvent.preventDefault();
+                roteamento.push('/chat');
+              }}
               styleSheet={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                 width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
               }}
             >
-              <Title tag="h2">Bem vindo ao meu PortifoLéo!</Title>
+              <Title>Bem vindo ao meu PortifoLéo!</Title>
               <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[300] }}>
                 {appConfig.name}
               </Text>
-  
+
               <TextField
-                placeholder='Digite seu nome.'
+                value={username}
+                placeholder='Digite seu usuário GitHub.'
                 fullWidth
+                onChange={function valid(a) {
+                  if (a.target.value.length > 2) {
+                    const valor = a.target.value;
+                    setUsername(valor);
+                  } else {
+                    setUsername();
+                  }
+
+                }}
                 textFieldColors={{
                   neutral: {
                     textColor: appConfig.theme.colors.neutrals[200],
@@ -120,6 +104,7 @@ export default function PaginaInicial() {
               />
               <Button
                 type='submit'
+                disabled={!username}
                 label='Entrar'
                 fullWidth
                 buttonColors={{
@@ -131,8 +116,8 @@ export default function PaginaInicial() {
               />
             </Box>
             {/* Formulário */}
-  
-  
+
+
             {/* Photo Area */}
             <Box
               styleSheet={{
@@ -155,6 +140,8 @@ export default function PaginaInicial() {
                   marginBottom: '16px',
                 }}
                 src={`https://github.com/${username}.png`}
+
+
               />
               <Text
                 variant="body4"
@@ -169,8 +156,23 @@ export default function PaginaInicial() {
               </Text>
             </Box>
             {/* Photo Area */}
+
+
+
+
+
+
           </Box>
+
+
+
+
+
+
+
         </Box>
-      </>
-    );
-  }
+      </Box>
+
+    </>
+  );
+}
