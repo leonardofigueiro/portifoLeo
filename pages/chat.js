@@ -216,7 +216,7 @@ function MessageList(props) {
                                     display: 'inline-block',
                                     marginRight: '8px',
                                 }}
-                                src={`https://github.com/vanessametonini.png`}
+                                src={`https://github.com/${mensagem.from}.png`}
                             />
                             <Text tag="strong" styleSheet={{ display: 'inline' }}>
                                 {mensagem.from}
