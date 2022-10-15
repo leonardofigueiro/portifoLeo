@@ -1,4 +1,4 @@
-import { Box, Text, TextField, Image, Button, Icon } from '@skynexui/components';
+import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React from 'react';
 import appConfig from '../config.json';
 import { createClient } from '@supabase/supabase-js';
