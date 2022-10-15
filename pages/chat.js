@@ -1,28 +1,52 @@
 import { Box, Text, TextField, Image, Button, Icon } from '@skynexui/components';
 import React from 'react';
 import appConfig from '../config.json';
+import { createClient } from '@supabase/supabase-js';
+
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5raWF6ZHN0a29scWp2eWVyb3FnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY2NTg1ODgwNywiZXhwIjoxOTgxNDM0ODA3fQ.fpIjLrEE7_OYSMZHifhZ6dlzMpVv8pfs4PZbFWgGmmU'
+const supabaseUrl = 'https://nkiazdstkolqjvyeroqg.supabase.co';
+const supabaseClient = createClient(supabaseUrl, SUPABASE_ANON_KEY);
+
+
 
 export default function ChatPage() {
     const [message, setMessage] = React.useState('');
     const [listMessage, setlistMessage] = React.useState([])
 
+    React.useEffect(()=>{
+        supabaseClient
+        .from('mensagens')
+        .select('*')
+        .order('id', {ascending: false})
+        .then((did)=> {
+            console.log('Dados da consulta', did)
+            setlistMessage(did.data)
+        });
+    }, []);
+
     function handleNovaMensagem(novaMensagem) {
         const mensagem = {
-            id: listMessage.length + 1,
+            //id: listMessage.length + 1,
             from: 'leonardofigueiro',
             text: novaMensagem,
+        };
+        supabaseClient
+            .from('mensagens')
+            .insert([
+                mensagem
+            ])
+            .then(({data}) => {
+                setlistMessage([
+                    mensagem,
+                    ...listMessage,
+        
+                ]);
 
-        }
-        setlistMessage([
-            mensagem,
-            ...listMessage,
+            })
 
-        ]);
+
+        
         setMessage('');
-    }
-    function delMessage(idMensagem){
-        const id = listMessage.id
-        console.log(id)
     }
 
     
@@ -78,7 +102,7 @@ export default function ChatPage() {
                             <li key={atual.id}>{atual.from} : {atual.text}</li>
                         )
                     })}  */}
-                        {delMessage()}
+                        
                     <Box
                         as="form"
                         onSubmit={(a)=> {
@@ -143,7 +167,7 @@ function Header() {
         <>
             <Box styleSheet={{ width: '100%', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} >
                 <Text variant='heading5'>
-                    Chat
+                    <h2>Chat</h2>
                 </Text>
                 <Button
                     variant='tertiary'
@@ -179,12 +203,12 @@ function MessageList(props) {
                         styleSheet={{
                             borderRadius: '5px',
                             padding: '6px',
-                            marginBottom: '12px',
+                            marginBottom: '16px',
                             marginRight: '5px',
                             backgroundColor: appConfig.theme.colors.neutrals[500],
-                            hover: {
-                                backgroundColor: appConfig.theme.colors.neutrals[700],
-                            }
+                            backgroundColor: appConfig.theme.colors.neutrals[700],
+                            boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
+                            
                         }}
                     >
                         <Box
@@ -218,7 +242,7 @@ function MessageList(props) {
                                 {(new Date().toLocaleDateString())}
                             </Text>
                         </Box>
-                        {mensagem.text}
+                        <p>{mensagem.text}</p>
                     </Text>
 
                 )
