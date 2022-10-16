@@ -7,17 +7,17 @@ import { ButtonSendSticker} from '../src/components/SendSticker'
 
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5raWF6ZHN0a29scWp2eWVyb3FnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY2NTg1ODgwNywiZXhwIjoxOTgxNDM0ODA3fQ.fpIjLrEE7_OYSMZHifhZ6dlzMpVv8pfs4PZbFWgGmmU'
 const supabaseUrl = 'https://nkiazdstkolqjvyeroqg.supabase.co';
-const supabaseClient = createClient(supabaseUrl, SUPABASE_ANON_KEY);
+const supabaseCliente = createClient(supabaseUrl, SUPABASE_ANON_KEY);
 
 // function realTimeMessage(adicionaMensagem){
-//     return supabaseClient
+//     return supa
 //     .from('mensagens')
 //     .on('INSERT', ({respostaLive}) => {
 //         adicionaMensagem(respostaLive.new);
 //     }).subscribe();
 // }
 function realTimeMessage(adicionaMensagem) {
-    return supabaseClient
+    return supabaseCliente
       .from('mensagens')
       .on('INSERT', (respostaLive) => {
         adicionaMensagem(respostaLive.new);
@@ -32,7 +32,7 @@ export default function ChatPage() {
     const [listMessage, setlistMessage] = React.useState([])
 
     React.useEffect(() => {
-        supabaseClient
+        supabaseCliente
             .from('mensagens')
         .select('*')
         .order('id', {ascending: false})
@@ -73,7 +73,7 @@ export default function ChatPage() {
             from: userLogado,
             text: novaMensagem,
         };
-        supabaseClient
+        supabaseCliente
             .from('mensagens')
             .insert([
                 mensagem
